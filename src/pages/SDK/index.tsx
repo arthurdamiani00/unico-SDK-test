@@ -174,7 +174,7 @@ function SDK() {
                 prepareSelfieCamera("/services.json", SelfieCameraTypes.SMART);
               }}
             >
-              PrepareCamera Smart
+              Open selfie camera
             </button>
 
             <button
@@ -187,20 +187,7 @@ function SDK() {
                 );
               }}
             >
-              PrepareDocumentCamera RG front
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                prepareDocumentCamera(
-                  "/services.json",
-                  DocumentCameraTypes.RG_VERSO,
-                  onSuccessDocumentRGBack
-                );
-              }}
-            >
-              PrepareDocumentCamera RG back
+              Open document camera
             </button>
             {/* <button
               type="button"
@@ -213,7 +200,7 @@ function SDK() {
                 )
               }}
             >
-              PrepareDocumentCamera CNH frnete
+              open CNH frnete
             </button>
             <button
               type="button"
@@ -226,9 +213,9 @@ function SDK() {
                 )
               }}
             >
-              PrepareDocumentCamera CNH Verso
+              open CNH Verso
             </button> */}
-            <button onClick={handleSubmit}>Chamar workflow</button>
+            <button onClick={handleSubmit}>call workflow</button>
           </main>
         </div>
       )}
