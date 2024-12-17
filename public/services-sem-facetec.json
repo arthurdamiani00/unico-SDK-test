@@ -1,14 +1,16 @@
 {
-    "project_info": {
-    "project_number": "866397781400608175836",
-    "project_id": "SDK"
-    },
-    "client_info": {
-    "mobilesdk_app_id": "",
-    "js_client_info": { "hostname": "http://localhost:3000" }
-    },
-    "host_info": {
-    "host_info": "Up4XTo9Enmc9krxVWOW2Kpy8CKm8ZAVsTDxHVLb2W1k8eUyMe3gk0iS7NuPUm6tR",
-    "host_key": "0/hKic1dSCHKHVYwm2cQKOoX6mGmkSmWrVdXRSX+eL14gbWete5Mwk8z31XlDJvn"
-    }
-}
+  "project_info": {
+   "project_number": "01692624498539479",
+   "project_id": "sdk"
+  },
+  "client_info": {
+   "mobilesdk_app_id": "sdk",
+   "js_client_info": {
+    "hostname": "https://www.novadax.com"
+   }
+  },
+  "host_info": {
+   "host_info": "nRMqSJJeWMZ0K4n9Dxs/Zhb5RslAxes+pmH0gJgmVtZdwNyOQ5wThBl1Sd+1hKs+D0gFCgAOsDVc6cWdPbtDMQ==",
+   "host_key": "P91J3MEqiLX6IxFYCeI/esM3to25xC0wvAiAF66fkLJJHobxNVWouRKrtRVzhNqZ"
+  }
+ }

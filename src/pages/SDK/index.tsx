@@ -3,6 +3,8 @@ import {
   DocumentCameraType,
   DocumentCameraTypes,
   ErrorPictureResponse,
+  LocaleType,
+  LocaleTypes,
   SDKEnvironmentTypes,
   SelfieCameraType,
   SelfieCameraTypes,
@@ -18,13 +20,16 @@ import "./styles.css";
 
 function SDK() {
   const [showBoxCamera, setShowBoxCamera] = useState(false);
+  const [showIframe, setShowIframe] = useState(false);
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
   const [faceMatch, setFaceMatch] = useState("");
-  const [documentImage, setDocumentImage] = useState("");
+  const [documentImageFront, setDocumentImageFront] = useState("");
+  const [documentImageBack, setDocumentImageBack] = useState("");
 
   function resetComponentStates() {
     setShowBoxCamera(false);
+    setShowIframe(false);
   }
 
   const urlPathModels = `${window.location.protocol}//${window.location.host}/models`;
@@ -32,12 +37,6 @@ function SDK() {
   //const config = new UnicoConfig()
   //.setHostname("http://localhost:3000")
   //.setHostKey("sdkKey_31211990-b685-4db7-bf10-ffb2c5881807")
-
-  const config = new UnicoConfig()
-    .setHostname("")
-    .setHostKey(
-      "P91J3MEqiLX6IxFYCeI/esM3to25xC0wvAiAF66fkLJJHobxNVWouRKrtRVzhNqZ"
-    );
 
   const unicoTheme = new UnicoThemeBuilder()
     .setColorSilhouetteSuccess("#69c62f")
@@ -56,38 +55,43 @@ function SDK() {
     )
     .build();
   const unicoCamera = new UnicoCheckBuilder()
-    .setTheme(unicoTheme)
-    .setModelsPath(urlPathModels)
-    .setResourceDirectory("/resources")
+    .setLocale(LocaleTypes.PT_BR)
     .setEnvironment(SDKEnvironmentTypes.UAT)
+    .setModelsPath(urlPathModels)
     .build();
+  const config = new UnicoConfig()
+    .setProjectNumber("01692624498539479")
+    .setProjectId("sdk")
+    .setMobileSdkAppId("sdk")
+    .setHostname("http://localhost:3000")
+    .setHostInfo(
+      "nRMqSJJeWMZ0K4n9Dxs/Zhb5RslAxes+pmH0gJgmVtZdwNyOQ5wThBl1Sd+1hKs+D0gFCgAOsDVc6cWdPbtDMQ=="
+    )
+    .setHostKey(
+      "P91J3MEqiLX6IxFYCeI/esM3to25xC0wvAiAF66fkLJJHobxNVWouRKrtRVzhNqZ"
+    );
 
   const onSuccessSmartSelfie = async (obj: SuccessPictureResponse) => {
     console.log("Smart Selfie Success:", obj);
-    setFaceMatch(obj.base64);
+    setFaceMatch(obj.encrypted);
     resetComponentStates();
   };
 
   const onSuccessDocumentRGFront = async (obj: SuccessPictureResponse) => {
-    console.log("Document RG Front:", obj);
-    setDocumentImage(obj.base64);
+    console.log("Document CNH Front:", obj);
+    setDocumentImageFront(obj.base64);
     resetComponentStates();
   };
 
   const onSuccessDocumentRGBack = async (obj: SuccessPictureResponse) => {
-    console.log("Document RG back:", obj);
-    // seu código específico para este caso
+    console.log("Document CNH back:", obj);
+    setDocumentImageBack(obj.base64);
     resetComponentStates();
   };
 
   // Função de erro comum
   const onError = (error: ErrorPictureResponse) => {
-    window.console.log(error);
-    window.alert(`
-        Câmera fechada
-        ------------------------------------
-        Motivo: ${error.code} - ${error.message} ${JSON.stringify(error.stack)}
-    `);
+    console.log(error);
     resetComponentStates();
   };
 
@@ -95,18 +99,17 @@ function SDK() {
     jsonPath: string | UnicoConfig,
     cameraType: SelfieCameraType
   ) => {
-    console.log(jsonPath);
-    const { open } = await unicoCamera.prepareSelfieCamera(
+    const { open } = await unicoCamera.prepareSelfieCameraForIFrame(
       jsonPath,
       cameraType
     );
 
     open({ on: { success: onSuccessSmartSelfie, error: onError } });
-    setShowBoxCamera(true);
+    setShowIframe(true);
   };
 
   const prepareDocumentCamera = async (
-    jsonPath: string,
+    jsonPath: string | UnicoConfig,
     cameraType: DocumentCameraType,
     onSuccess: (obj: SuccessPictureResponse) => Promise<void>
   ) => {
@@ -122,10 +125,13 @@ function SDK() {
   const handleSubmit = async () => {
     await axios
       .post(`http://localhost:3001/execute-workflow`, {
-        documento: cpf,
-        nome: name,
-        biometriaFacial: faceMatch,
-        imagemDocumento: documentImage,
+        code: cpf,
+        name: name,
+        clientDataBiometriaFacial: faceMatch,
+        clientDataImagemDocumentoETipo: [
+          { imagem: documentImageFront, tipo: "401" },
+          { imagem: documentImageBack, tipo: "402" },
+        ],
       })
       .then((res) => console.log(res))
       .catch((error) => console.error(error));
@@ -140,8 +146,19 @@ function SDK() {
       >
         <div id="box-camera"></div>
       </div>
+      <div
+        style={{
+          display: showIframe ? "inline" : "none",
+        }}
+      >
+        <iframe
+          allow="fullscreen;camera;geolocation"
+          allowFullScreen
+          src="http://localhost:3000"
+        ></iframe>
+      </div>
 
-      {!showBoxCamera && (
+      {!showBoxCamera && !showIframe && (
         <div className="main-container">
           <main>
             <input
@@ -154,24 +171,11 @@ function SDK() {
               value={cpf}
               onChange={(e) => setCpf(e.target.value)}
             />
-            {/* <button
-              type="button"
-              onClick={() => {
-                prepareSelfieCamera(
-                  config,
-                  SelfieCameraTypes.NORMAL,
-                  'Facetec Liveness',
-                  true
-                )
-              }}
-            >
-              PrepareCamera Facetec
-            </button> */}
 
             <button
               type="button"
               onClick={() => {
-                prepareSelfieCamera("/services.json", SelfieCameraTypes.SMART);
+                prepareSelfieCamera(config, SelfieCameraTypes.SMART);
               }}
             >
               Open selfie camera
@@ -181,40 +185,26 @@ function SDK() {
               type="button"
               onClick={() => {
                 prepareDocumentCamera(
-                  "/services.json",
-                  DocumentCameraTypes.RG_FRENTE,
+                  config,
+                  DocumentCameraTypes.CNH_FRENTE,
                   onSuccessDocumentRGFront
                 );
               }}
             >
               Open document camera
             </button>
-            {/* <button
-              type="button"
-              onClick={() => {
-                prepareDocumentCamera(
-                  '/services.json',
-                  DocumentCameraTypes.CNH_FRENTE,
-                  'CNH Frente',
-                  true
-                )
-              }}
-            >
-              open CNH frnete
-            </button>
             <button
               type="button"
               onClick={() => {
                 prepareDocumentCamera(
-                  '/services.json',
+                  config,
                   DocumentCameraTypes.CNH_VERSO,
-                  'CNH verso',
-                  true
-                )
+                  onSuccessDocumentRGBack
+                );
               }}
             >
-              open CNH Verso
-            </button> */}
+              Open document camera
+            </button>
             <button onClick={handleSubmit}>call workflow</button>
           </main>
         </div>

@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 app.post('/execute-workflow', async (req, res) => {
-  const workflowId = "848b1ddf-817f-4d7d-a7c7-70d9f11f9492";
-  const workflowVersionId = "5eb979d5-99ed-408b-b3f7-ed5822387228";
+  const workflowId = "2ef78a56-8634-41dc-8433-209e34dca4da";
+  const workflowVersionId = "b7b043be-2b7c-4a3f-bc4a-891a64b15467";
   const apiTokenSecret = process.env.API_TOKEN_SECRET;
   const apiTokenId = process.env.API_TOKEN_ID;
   const credentials = `${apiTokenId}:${apiTokenSecret}`;
@@ -19,7 +19,7 @@ app.post('/execute-workflow', async (req, res) => {
 
   try {
     const response = await axios.post(
-      `https://api.vaas.live/workflows/v1/${workflowId}/versions/${workflowVersionId}/execute`,
+      `https://api.vaas.live/workflows/v1/${workflowId}/execute`,
       req.body,
       {
         headers: {
