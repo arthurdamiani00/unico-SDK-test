@@ -129,8 +129,8 @@ function SDK() {
         name: name,
         clientDataBiometriaFacial: faceMatch,
         clientDataImagemDocumentoETipo: [
-          { imagem: documentImageFront, tipo: "401" },
-          { imagem: documentImageBack, tipo: "402" },
+          { imageBase64: documentImageFront, type: "401" },
+          { imageBase64: documentImageBack, type: "402" },
         ],
       })
       .then((res) => console.log(res))
