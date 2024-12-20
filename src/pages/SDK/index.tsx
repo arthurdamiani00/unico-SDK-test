@@ -133,8 +133,14 @@ function SDK() {
           { imageBase64: documentImageBack, type: "402" },
         ],
       })
-      .then((res) => console.log(res))
-      .catch((error) => console.error(error));
+      .then((res) => {
+        console.log(res);
+        alert("Workflow executado com sucesso");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Erro ao executar workflow");
+      });
   };
 
   return (
@@ -191,7 +197,7 @@ function SDK() {
                 );
               }}
             >
-              Open document camera
+              Open CNH front camera
             </button>
             <button
               type="button"
@@ -203,7 +209,7 @@ function SDK() {
                 );
               }}
             >
-              Open document camera
+              Open CNH back camera
             </button>
             <button onClick={handleSubmit}>call workflow</button>
           </main>
