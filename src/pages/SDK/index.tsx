@@ -61,9 +61,9 @@ function SDK() {
     .build();
   const config = new UnicoConfig()
     .setProjectNumber("01692624498539479")
-    .setProjectId("sdk")
-    .setMobileSdkAppId("sdk")
-    .setHostname("http://localhost:3000")
+    .setProjectId("SDK")
+    .setMobileSdkAppId("SDK")
+    .setHostname("http://localhost:3050")
     .setHostInfo(
       "nRMqSJJeWMZ0K4n9Dxs/Zhb5RslAxes+pmH0gJgmVtZdwNyOQ5wThBl1Sd+1hKs+D0gFCgAOsDVc6cWdPbtDMQ=="
     )
@@ -160,7 +160,7 @@ function SDK() {
         <iframe
           allow="fullscreen;camera;geolocation"
           allowFullScreen
-          src="http://localhost:3000"
+          src="http://localhost:3050"
         ></iframe>
       </div>
 
