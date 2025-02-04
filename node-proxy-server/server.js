@@ -11,6 +11,7 @@ app.use(express.json({ limit: '50mb' }));
 
 app.post('/execute-workflow', async (req, res) => {
   const workflowId = process.env.WORKFLOW_ID;
+  const workflowVersionId = process.env.WORKFLOW_VERSION_ID;
   const apiTokenSecret = process.env.API_TOKEN_SECRET;
   const apiTokenId = process.env.API_TOKEN_ID;
   const credentials = `${apiTokenId}:${apiTokenSecret}`;
@@ -18,7 +19,7 @@ app.post('/execute-workflow', async (req, res) => {
 
   try {
     const response = await axios.post(
-      `https://api.vaas.live/workflows/v1/${workflowId}/execute`,
+      `https://api.vaas.live/workflows/v1/${workflowId}/versions/${workflowVersionId}/execute`,
       req.body,
       {
         headers: {

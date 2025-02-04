@@ -133,11 +133,11 @@ function SDK() {
           { imageBase64: documentImageBack, type: "402" },
         ],
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res);
         alert("Workflow executado com sucesso");
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error(error);
         alert("Erro ao executar workflow");
       });
@@ -151,17 +151,6 @@ function SDK() {
         }}
       >
         <div id="box-camera"></div>
-      </div>
-      <div
-        style={{
-          display: showIframe ? "inline" : "none",
-        }}
-      >
-        <iframe
-          allow="fullscreen;camera;geolocation"
-          allowFullScreen
-          src="http://localhost:3050"
-        ></iframe>
       </div>
 
       {!showBoxCamera && !showIframe && (
